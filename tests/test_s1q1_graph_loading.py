@@ -1,6 +1,6 @@
 # This will work if ran from the root folder.
 import sys 
-sys.path.append("delivery_network/")
+sys.path.append("delivery_network")
 
 import unittest 
 from graph import Graph, graph_from_file
