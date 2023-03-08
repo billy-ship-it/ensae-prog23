@@ -122,12 +122,11 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
     
     def min_power(self, src, dest):
-        """
-        Should return path, min_power. 
-        """
-        raise NotImplementedError
+        power = 0
+        while not self.get_path_with_power(src, dest, power):
+            power += 1
+        return power, self.get_path_with_power(src, dest, power)
     
-
 
     def creation_bijection(self):
         """
