@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from heapq import *
 
 
 class Graph:
@@ -39,137 +40,43 @@ class Graph:
         if node1 not in self.graph[node2]:
             self.graph[node1].append([node2, power_min, dist])
             self.graph[node2].append([node1, power_min, dist])
-            self.nb_edges += 1        
+            self.nb_edges += 1      
+
     
     def get_path_with_power(self, src, dest, power):
-        """ 
-        Cette fonction renvoie None si il n'existe pas de chemin entre la  
-        source et la destination, le chemin le plus court s'il existe
-        """
-        if dest not in self.connected_components_node(src):
+        liste = self.connected_components_node(src)
+        if dest not in liste:
             return None
-        tableau = self.initialisation_tableau(src, dest, power)
-        arrivee = False
-        case_grise = [src]
-        while not arrivee:
-            tableau = self.parcourir_graphe(tableau, src, dest, arrivee, case_grise, power)
-            if self.noeud_min(tableau, src, case_grise) == dest:
-                break
-        return self.explorer_noeud_precedent(dest, src, tableau, [])
-    
-    def initialisation_tableau(self, src, dest, power):
-        """
-        Cette fonction permet d'initialiser le tableau que nous utilisons pour
-        la fonction get_path_with_power. Elle renvoie un tableau avec la 
-        distance par rapport au point de départ. On met 0 pour la source,
-        et inf pour les autres sommets
-        """
-        tableau = np.zeros((1, len(self.connected_components_node(src))+1))
-        for k in range(len(self.connected_components_node(src)) + 1):
-            tableau[0][k] = math.inf
-        tableau[0, src] = 0
-        return tableau
+        return self.dijkstra(src, dest, power)
 
-    def parcourir_graphe(self, tableau, src, dest, arrivee, case_grise, power):
-        """
-        Cette fonction permet de remplir le tableau que nous utilisons pour 
-        l'algorithme de recherche du plus court chemin
-        """
-        noeud = self.noeud_min(tableau, src, case_grise)
-        nouveau_tableau = self.creation_ligne(tableau, src, case_grise)
-        # # on crée un nouveau tableau avec la nouvelle ligne avec dans 
-        # la colonne départ le nouveau noeud 
-        Voisins = self.noeuds_voisins(noeud)
-        for k in range(1, len(self.connected_components_node(src)) + 1):
-            puissance_arete = self.puissance(noeud, k)
-            if k in Voisins and k not in case_grise and self.puissance(noeud, k) <= power:
-                nouveau_tableau[-1][k] = self.distance(noeud, k) + nouveau_tableau[-2][noeud]
-                if nouveau_tableau[- 2][k] < nouveau_tableau[- 1][noeud] + self.distance(noeud, k):  # si l'ancienne distance était plus courte, on la garde
-                    nouveau_tableau[- 1][k] = nouveau_tableau[- 2][k] 
-            elif k in case_grise:
-                nouveau_tableau[- 1][k] = math.inf
-            else:
-                nouveau_tableau[- 1][k] = nouveau_tableau[- 2][k]
-        nouveau_tableau[- 1][noeud] = math.inf
-        return nouveau_tableau
 
-    def creation_ligne(self, tableau, src, case_grise):
-        """ 
-        Cette fonction crée une nouvelle ligne et l'ajoute au tableau
-        """
-        nouvelle_ligne = np.zeros((1, len(self.connected_components_node(src)) + 1))
-        nouvelle_ligne[0][0] = self.noeud_min(tableau, src, case_grise)
-        tableau = np.vstack([tableau, nouvelle_ligne])
-        return tableau
-    
-    def noeud_min(self, tableau, src, case_grise):
-        """
-        Cette fonction renvoie le noeud de la dernière ligne du tableau ayant
-        la distance minimale de telle sorte à pourvoir explorer les
-        voisins de ce noeud
-        """
-        noeud_min = 0
-        min_ligne_precedente = math.inf
-        for k in range(1, len(self.connected_components_node(src)) + 1):
-            if tableau[- 1][k] < min_ligne_precedente:
-                noeud_min = k
-                min_ligne_precedente = tableau[- 1][k]
-        case_grise.append(noeud_min)
-        return noeud_min
-    
-    def distance(self, noeud, voisin):
-        """
-        Cette fonction renvoie la distance
-        entre deux noeuds
-        """
-        liste = self.graph[noeud]
-        for element in liste:
-            distance = element[2]
-            noeud_voisin = element[0]
-            if noeud_voisin == voisin:
-                return distance
-    
-    def puissance(self, noeud, voisin):
-        liste = self.graph[noeud]
-        for element in liste:
-            noeud_voisin = element[0]
-            power = element[1]
-            if noeud_voisin == voisin:
-                return power
 
-    def noeuds_voisins(self, node):
-        """
-        Cette fonction renvoie la liste des noeuds voisins
-        """
-        liste = self.graph[node]
-        if len(liste) == 1:
-            return liste
-        else:
-            liste = np.array(liste)
-            liste = liste[:, 0]
-            return liste
-
-    def explorer_noeud_precedent(self, noeud, src, tableau, CHEMIN):
-        """
-        Cette fonction ajoute dans la liste chemin les noeuds par 
-        lesquels le chemin doit passer
-        """
-        while noeud != src:
-            CHEMIN.append(noeud)
-            noeud = int(self.noeud_precedent(noeud, tableau))
-        CHEMIN.append(src)
-        CHEMIN.reverse()
-        return CHEMIN
-        
-    def noeud_precedent(self, node, tableau):
-        """
-        Cette fonction renvoie le noeud qui précède node
-        """
-        liste = tableau[:, node]
-        minimum_liste = min(liste)
-        for k in range(0, len(liste)):
-            if liste[k] == minimum_liste:
-                return tableau[k][0]  # renvoie le noeud precedent
+    def dijkstra(self, s, t, power):
+        Vu = set()
+        d = {s: 0}
+        prédecesseurs = {}
+        suivants = [(0, s)]  # Â tas de couples (d[x],x)
+        while suivants != []:
+            dx, x = heappop(suivants)
+            if x in Vu:
+                continue
+            Vu.add(x)
+            for y, p, w in self.graph[x]:
+                if y in Vu:
+                    continue
+                dy = dx + w
+                if (y not in d or d[y] > dy) and power >= p:
+                    d[y] = dy
+                    heappush(suivants, (dy, y))
+                    prédecesseurs[y] = x
+        path = [t]
+        x = t
+        if t not in d:
+            return None
+        while x != s:
+            x = prédecesseurs[x]
+            path.insert(0, x)
+        return path
 
     def connected_components(self):
         L = [0]*self.nb_nodes  # initialisation d'une liste pour savoir si les 
