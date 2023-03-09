@@ -217,7 +217,7 @@ def union(parent, rank, x, y):
 
 
 def kruskal(graph):
-    result = []
+    result = {}
     i = 0
     e = 0
     parent = {node: node for node in graph.nodes}
@@ -230,28 +230,20 @@ def kruskal(graph):
     L = sorted(L, key=lambda item: item[2])
 
     while e < graph.nb_nodes - 1 and i < graph.nb_edges:
-        w, u, v , z = L[i]
+        u, v, w , z = L[i]
         i += 1
         x = find(parent, u)
         y = find(parent, v)
 
         if x != y:
             e += 1
-            result.append([u, v, w])
+            if u not in result:
+                result[u] = [(v, w, z)]
+            else:
+                result[u].append((v, w, z))
+            if v not in result:
+                result[v] = [(u, w, z)]
+            else:
+                result[v].append((u, w, z))
             union(parent, rank, x, y)
-
-    return  construction_resultat(result)
-
-def construction_resultat(result):
-    L = []
-    for element in result:
-        node1, node2, puissance = element
-        if node1 not in L:
-            L.append(node1)
-        if node2 not in L:
-            L.append(node2)
-    graphe = Graph(L)
-    for element in result:
-        node1, node2, puissance = element
-        graphe.add_edge(node1, node2, puissance)
-    return graphe
+    return  result
