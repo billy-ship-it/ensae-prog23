@@ -49,8 +49,6 @@ class Graph:
             return None
         return self.dijkstra(src, dest, power)
 
-
-
     def dijkstra(self, s, t, power):
         Vu = set()
         d = {s: 0}
@@ -77,6 +75,36 @@ class Graph:
             x = prédecesseurs[x]
             path.insert(0, x)
         return path
+
+
+
+
+
+
+
+
+
+
+
+ 
+    def puissance_min(self, power_precedent):
+        power_min = math.inf
+        L = []
+        for node1 in range(1, self.nb_nodes + 1):
+            for element in self.graph[node1]:
+                node2, puissance, distance = element
+                if puissance <= power_min and puissance > power_precedent:
+                    power_min = puissance
+                    L.append([node1, node2, puissance, distance])
+        if len(L) == 0:
+            return None
+        L.reverse()
+        D = [L[0]]
+        power_min = L[0][2]
+        for k in range(len(L)):
+            if L[k][2] == power_min:
+                D.append(L[k])
+        return D
 
     def connected_components(self):
         L = [0]*self.nb_nodes  # initialisation d'une liste pour savoir si les 
@@ -126,25 +154,6 @@ class Graph:
         while not self.get_path_with_power(src, dest, power):
             power += 1
         return self.get_path_with_power(src, dest, power), power
-    
-
-    def creation_bijection(self):
-        """
-        Cette fonction crée une bijection entre des sommets et des numéros
-        """
-        liste = self.nodes
-        nouvelle_liste = Graph([i for i in range(1, len(liste) + 1)])
-        self = nouvelle_liste
-        for k in range(len(liste)):
-            dictionnaire = self.graph[liste[k]]
-            for element in dictionnaire:
-                voisin = element[0]
-                power = element[1]
-                dist = element[2]
-                nouvelle_liste.add_edge(k + 1, self.indice(voisin) + 1, power)
-        self = nouvelle_liste
-        return self
-
 
     def indice(self, node):
         liste = self.nodes
@@ -187,3 +196,62 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
+
+def find(parent, i):
+    if parent[i] == i:
+        return i
+    return find(parent, parent[i])
+
+
+def union(parent, rank, x, y):
+    xroot = find(parent, x)
+    yroot = find(parent, y)
+
+    if rank[xroot] < rank[yroot]:
+        parent[xroot] = yroot
+    elif rank[xroot] > rank[yroot]:
+        parent[yroot] = xroot
+    else:
+        parent[yroot] = xroot
+        rank[xroot] += 1
+
+
+def kruskal(graph):
+    result = []
+    i = 0
+    e = 0
+    parent = {node: node for node in graph.nodes}
+    rank = {node: 0 for node in graph.nodes}
+    L = []
+    for node in graph.nodes:
+        for element in graph.graph[node]:
+            noeud, puissance, distance = element
+            L.append([node, noeud, puissance, distance])
+    L = sorted(L, key=lambda item: item[2])
+
+    while e < graph.nb_nodes - 1 and i < graph.nb_edges:
+        w, u, v , z = L[i]
+        i += 1
+        x = find(parent, u)
+        y = find(parent, v)
+
+        if x != y:
+            e += 1
+            result.append([u, v, w])
+            union(parent, rank, x, y)
+
+    return  construction_resultat(result)
+
+def construction_resultat(result):
+    L = []
+    for element in result:
+        node1, node2, puissance = element
+        if node1 not in L:
+            L.append(node1)
+        if node2 not in L:
+            L.append(node2)
+    graphe = Graph(L)
+    for element in result:
+        node1, node2, puissance = element
+        graphe.add_edge(node1, node2, puissance)
+    return graphe
