@@ -125,7 +125,7 @@ class Graph:
         power = 0
         while not self.get_path_with_power(src, dest, power):
             power += 1
-        return power, self.get_path_with_power(src, dest, power)
+        return self.get_path_with_power(src, dest, power), power
     
 
     def creation_bijection(self):
