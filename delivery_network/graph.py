@@ -44,28 +44,29 @@ class Graph:
 
     
     def get_path_with_power(self, src, dest, power):
-        liste = self.connected_components_node(src)
+        liste = self.connected_components_node(src)              # Cette première partie de la fonction sert à vérifier qu'il existe bien un chemin possible entre src et dest. 
         if dest not in liste:
             return None
-        return self.dijkstra(src, dest, power)
+        return self.dijkstra(src, dest, power)                   # Complexité donc en O(V*(E+V!)) d'après celle des fonction précédentes
 
 
 
-    def dijkstra(self, s, t, power):
+
+    def dijkstra(self, s, t, power):                              # Algorithme qui retourne le plus court chemin à partir d'un trajet
         Vu = set()
         d = {s: 0}
         prédecesseurs = {}
-        suivants = [(0, s)]  # Â tas de couples (d[x],x)
-        while suivants != []:
-            dx, x = heappop(suivants)
+        suivants = [(0, s)]  # Â tas de couples (d[x],x)           #Création de listes qui seront incrémentées/dépilées au fur et à mesure du parcours de la composante connexe
+        while suivants != []:                                       # V occurences au plus 
+            dx, x = heappop(suivants)                              # Implémentation de la priorité d'exploration de ce qui reste à explorer
             if x in Vu:
                 continue
             Vu.add(x)
-            for y, p, w in self.graph[x]:
+            for y, p, w in self.graph[x]:                         # E occurrences au plus, dans le cas ou x est "au centre" d'un graphe de rayons autour de x
                 if y in Vu:
                     continue
                 dy = dx + w
-                if (y not in d or d[y] > dy) and power >= p:
+                if (y not in d or d[y] > dy) and power >= p:       # Double condition de puissance et de plus courte ditance
                     d[y] = dy
                     heappush(suivants, (dy, y))
                     prédecesseurs[y] = x
@@ -73,39 +74,34 @@ class Graph:
         x = t
         if t not in d:
             return None
-        while x != s:
+        while x != s:                                               # V occurences au plus
             x = prédecesseurs[x]
             path.insert(0, x)
-        return path
+        return path                                                 # Complexité en O(V*E + V), donc en O(E*V)
 
     def connected_components(self):
-        L = [0]*self.nb_nodes  # initialisation d'une liste pour savoir si les 
-        #  sommet ont déja été parcourus
-        compteur = 1  # on initialise le compteur
-        for node in range(1, self.nb_nodes + 1):
+        L = [0]*self.nb_nodes                                       # initialisation d'une liste pour savoir si les sommets ont déjà été visités
+        compteur = 1                                                # on initialise le compteur
+        for node in range(1, self.nb_nodes + 1):                    # V occurrences
             if L[node - 1] == 0:
-                self.explorer(node, L, compteur)  # ce qui revient à modifier
-            #  la liste L pour connaître les sommmets qui ont déja été parcours 
+                self.explorer(node, L, compteur)                   # ce qui revient à modifier la liste L pour connaître les sommmets qui ont déja été parcourus 
                 compteur += 1
         LIST = []
         for compteur in range(1, max(L) + 1):
             V = []
             for node in range(1, self.nb_nodes + 1):
                 if L[node - 1] == compteur: 
-                    V.append(node)  # On met dans la même liste tous les 
-                    # sommets qui sont reliés entre eux
+                    V.append(node)                                 # On met dans la même liste tous les sommets qui sont reliés entre eux
             LIST.append(V)
-        return LIST
+        return LIST                                                  # Complexité en O(V*V!), fonctionne donc pour un graphe de taille réduite.
     
     def explorer(self, node, L, compteur):
-        L[node - int(1)] = compteur  # Lorsque l'on se rend sur on nouveau  
-        # sommet, on le marque
+        L[node - int(1)] = compteur                                # Lorsque l'on se rend sur on nouveau sommet, on le marque
         element = self.graph[node]
-        for noeud in element:
+        for noeud in element:                                      # Au plus V occurrences
             voisin = noeud[0]
             if L[voisin - 1] == 0:
-                self.explorer(voisin, L, compteur)  # On marque 
-    #  tous les sommets qui sont voisins avec le sommet initial
+                self.explorer(voisin, L, compteur)                 # On marque tous les sommets qui sont voisins avec le sommet initial
 
     def connected_components_node(self, node):
         L = self.connected_components()
@@ -123,9 +119,9 @@ class Graph:
     
     def min_power(self, src, dest):
         power = 0
-        while not self.get_path_with_power(src, dest, power):
+        while not self.get_path_with_power(src, dest, power):               # Au plus P (max des puissances minimale des routes) occurrences
             power += 1
-        return self.get_path_with_power(src, dest, power), power
+        return self.get_path_with_power(src, dest, power), power            # Complexité en O(P*V*(E+V!)+ V*(E+V!)))
     
 
     def creation_bijection(self):
@@ -187,3 +183,13 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
+
+
+
+
+
+
+
+
+
+
