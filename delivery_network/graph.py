@@ -324,6 +324,20 @@ def kruskal(graph):
     return graphe_final​
 
 
+def puissance_minimale_tree(g: Graph,t):
+    h = kruskal(g)
+    (src,dest) = t
+    chemin = h.
+
+
+
+
+
+
+
+
+
+
 
 
 
