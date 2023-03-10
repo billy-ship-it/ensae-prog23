@@ -185,6 +185,143 @@ def graph_from_file(filename):
     return g
 
 
+def find(parent, i):  # permet de dire 
+
+    if parent[i] == i:
+
+        return i
+
+    return find(parent, parent[i])
+
+
+
+
+
+def union(parent, rank, x, y):  # parent est le dictionnaire à modifier
+
+    """ Union est une fonction qui modifie le dictionnaire parent
+
+    """
+
+    xroot = find(parent, x)  # on cherche le noeud racine de x
+
+    yroot = find(parent, y)  # on cherche le noeud racine de y
+
+
+
+    if rank[xroot] < rank[yroot]:  # on modifie le dictionnaire parent pour attacher l'arbre le plus petit à la racine de l'arbre le pluls grand
+
+        parent[xroot] = yroot
+
+    elif rank[xroot] > rank[yroot]:
+
+        parent[yroot] = xroot
+
+    else:
+
+        parent[yroot] = xroot
+
+        rank[xroot] += 1
+
+
+
+
+
+def kruskal(graph):
+
+    result = {}
+
+    i = 0
+
+    e = 0
+
+    parent = {node: node for node in graph.nodes}  # on initialise le dictionnaire
+
+    rank = {node: 0 for node in graph.nodes}  # on initialise le dictionnaire
+
+    L = []
+
+    for node in graph.nodes:
+
+        for element in graph.graph[node]:
+
+            noeud, puissance, distance = element
+
+            L.append([node, noeud, puissance, distance])
+
+    L = sorted(L, key=lambda item: item[2])  # Correspond aux arêtes rangées par ordre croissant
+
+
+
+    while e < graph.nb_nodes - 1 and i < len(L):
+
+        u, v, w, z = L[i]
+
+        i += 1  # i est l'indice qui parcourt tous l'ensemble des arêtes
+
+        x = find(parent, u)  # on cherche les racines du noeud u
+
+        y = find(parent, v)  # on chercher les racines du noeud v
+
+        if x != y:  # si les deux noeuds n'ont pas la même racine
+
+            e += 1  # on rajoute une arête au compteur
+
+            if u not in result:
+
+                result[u] = [(v, w, z)]
+
+            else:
+
+                if (v, w, z) not in result[u]:
+
+                    result[u].append((v, w, z))  # on rajoute dans le dictionnaire
+
+            if v not in result:
+
+                result[v] = [(u, w, z)]
+
+            else:
+
+                if (u, w, z) not in result[v]:
+
+                    result[v].append((u, w, z))
+
+            union(parent, rank, u, v)  # on met à jour le dictionnaire pour dire que 
+
+
+
+    sorted_keys = sorted(result.keys())
+
+    sorted_result = {}
+
+
+
+    for key in sorted_keys:
+
+        sorted_result[key] = result[key]
+
+
+
+    graphe_final = Graph(graph.nodes)
+
+    for node1 in sorted_result.keys():
+
+        for element in sorted_result[node1]:
+
+            node2, puissance, distance = element
+
+            if (node2, puissance, distance) not in graphe_final.graph[node1]:
+
+                graphe_final.graph[node1].append((node2, puissance, distance))
+
+            if (node1, puissance, distance) not in graphe_final.graph[node2]:
+
+                graphe_final.graph[node2].append((node1, puissance, distance))
+
+
+
+    return graphe_final​
 
 
 
