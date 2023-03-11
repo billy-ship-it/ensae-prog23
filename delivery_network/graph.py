@@ -43,26 +43,29 @@ class Graph:
             self.nb_edges += 1      
 
     def get_path_with_power(self, src, dest, power):
-        liste = self.connected_components_node(src)
+        liste = self.connected_components_node(src)              # Cette première partie de la fonction sert à vérifier qu'il existe bien un chemin possible entre src et dest. 
         if dest not in liste:
             return None
-        return self.dijkstra(src, dest, power)
+        return self.dijkstra(src, dest, power)                   # Complexité donc en O(V*(E+V!)) d'après celle des fonction précédentes
 
-    def dijkstra(self, s, t, power):
+
+
+
+    def dijkstra(self, s, t, power):                              # Algorithme qui retourne le plus court chemin à partir d'un trajet
         Vu = set()
         d = {s: 0}
         prédecesseurs = {}
-        suivants = [(0, s)]  # Â tas de couples (d[x],x)
-        while suivants != []:
-            dx, x = heappop(suivants)
+        suivants = [(0, s)]  # Â tas de couples (d[x],x)           #Création de listes qui seront incrémentées/dépilées au fur et à mesure du parcours de la composante connexe
+        while suivants != []:                                       # V occurences au plus 
+            dx, x = heappop(suivants)                              # Implémentation de la priorité d'exploration de ce qui reste à explorer
             if x in Vu:
                 continue
             Vu.add(x)
-            for y, p, w in self.graph[x]:
+            for y, p, w in self.graph[x]:                         # E occurrences au plus, dans le cas ou x est "au centre" d'un graphe de rayons autour de x
                 if y in Vu:
                     continue
                 dy = dx + w
-                if (y not in d or d[y] > dy) and power >= p:
+                if (y not in d or d[y] > dy) and power >= p:       # Double condition de puissance et de plus courte ditance
                     d[y] = dy
                     heappush(suivants, (dy, y))
                     prédecesseurs[y] = x
@@ -70,58 +73,34 @@ class Graph:
         x = t
         if t not in d:
             return None
-        while x != s:
+        while x != s:                                               # V occurences au plus
             x = prédecesseurs[x]
             path.insert(0, x)
         return path
- 
-    def puissance_min(self, power_precedent):
-        power_min = math.inf
-        L = []
-        for node1 in range(1, self.nb_nodes + 1):
-            for element in self.graph[node1]:
-                node2, puissance, distance = element
-                if puissance <= power_min and puissance > power_precedent:
-                    power_min = puissance
-                    L.append([node1, node2, puissance, distance])
-        if len(L) == 0:
-            return None
-        L.reverse()
-        D = [L[0]]
-        power_min = L[0][2]
-        for k in range(len(L)):
-            if L[k][2] == power_min:
-                D.append(L[k])
-        return D
 
     def connected_components(self):
-        L = [0]*self.nb_nodes  # initialisation d'une liste pour savoir si les 
-        #  sommet ont déja été parcourus
-        compteur = 1  # on initialise le compteur
-        for node in range(1, self.nb_nodes + 1):
+        L = [0]*self.nb_nodes                                       # initialisation d'une liste pour savoir si les sommets ont déjà été visités
+        compteur = 1                                                # on initialise le compteur
+        for node in range(1, self.nb_nodes + 1):                    # V occurrences
             if L[node - 1] == 0:
-                self.explorer(node, L, compteur)  # ce qui revient à modifier
-            #  la liste L pour connaître les sommmets qui ont déja été parcours 
+                self.explorer(node, L, compteur)                   # ce qui revient à modifier la liste L pour connaître les sommmets qui ont déja été parcourus 
                 compteur += 1
         LIST = []
         for compteur in range(1, max(L) + 1):
             V = []
             for node in range(1, self.nb_nodes + 1):
                 if L[node - 1] == compteur: 
-                    V.append(node)  # On met dans la même liste tous les 
-                    # sommets qui sont reliés entre eux
+                    V.append(node)                                 # On met dans la même liste tous les sommets qui sont reliés entre eux
             LIST.append(V)
-        return LIST
+        return LIST                                                  # Complexité en O(V*V!), fonctionne donc pour un graphe de taille réduite.
     
     def explorer(self, node, L, compteur):
-        L[node - int(1)] = compteur  # Lorsque l'on se rend sur on nouveau  
-        # sommet, on le marque
+        L[node - int(1)] = compteur                                # Lorsque l'on se rend sur on nouveau sommet, on le marque
         element = self.graph[node]
-        for noeud in element:
+        for noeud in element:                                      # Au plus V occurrences
             voisin = noeud[0]
             if L[voisin - 1] == 0:
-                self.explorer(voisin, L, compteur)  # On marque 
-    #  tous les sommets qui sont voisins avec le sommet initial
+                self.explorer(voisin, L, compteur)                 # On marque tous les sommets qui sont voisins avec le sommet initial
 
     def connected_components_node(self, node):
         L = self.connected_components()
@@ -139,9 +118,28 @@ class Graph:
     
     def min_power(self, src, dest):
         power = 0
-        while not self.get_path_with_power(src, dest, power):
+        while not self.get_path_with_power(src, dest, power):               # Au plus P (max des puissances minimale des routes) occurrences
             power += 1
         return self.get_path_with_power(src, dest, power), power
+    
+
+    def creation_bijection(self):
+        """
+        Cette fonction crée une bijection entre des sommets et des numéros
+        """
+        liste = self.nodes
+        nouvelle_liste = Graph([i for i in range(1, len(liste) + 1)])
+        self = nouvelle_liste
+        for k in range(len(liste)):
+            dictionnaire = self.graph[liste[k]]
+            for element in dictionnaire:
+                voisin = element[0]
+                power = element[1]
+                dist = element[2]
+                nouvelle_liste.add_edge(k + 1, self.indice(voisin) + 1, power)
+        self = nouvelle_liste
+        return self
+
 
     def indice(self, node):
         liste = self.nodes
@@ -198,74 +196,3 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
-
-
-def find(parent, i):  # permet de déterminer dans quelle composante connexe le noeud i est 
-    if parent[i] == i:
-        return i
-    return find(parent, parent[i])
-
-
-def union(parent, rank, x, y):  # parent est le dictionnaire à modifier
-    """ Union est une fonction qui modifie le dictionnaire parent
-    """
-    xroot = find(parent, x)  # on cherche le noeud racine de x
-    yroot = find(parent, y)  # on cherche le noeud racine de y
-
-    if rank[xroot] < rank[yroot]:  # on modifie le dictionnaire parent pour attacher l'arbre le plus petit à la racine de l'arbre le plus grand
-        parent[xroot] = yroot
-    elif rank[xroot] > rank[yroot]:
-        parent[yroot] = xroot
-    else:
-        parent[yroot] = xroot
-        rank[xroot] += 1
-
-
-def kruskal(graph):
-    result = {}
-    i = 0
-    e = 0 # correspond au nombre d'arêtes du nouveau graphe
-    parent = {node: node for node in graph.nodes}  # on initialise le dictionnaire pour que les noeuds ne soient pas dans la même composante connexe au début
-    rank = {node: 0 for node in graph.nodes}  # on initialise le dictionnaire
-    L = []
-    for node in graph.nodes:
-        for element in graph.graph[node]:
-            noeud, puissance, distance = element
-            L.append([node, noeud, puissance, distance])
-    L = sorted(L, key=lambda item: item[2])  # Correspond aux arêtes rangées par ordre croissant de puissance
-
-    while e < graph.nb_nodes - 1 and i < len(L):  # L'arbre est couvrant lorsque e = nombre de noeuds - 1
-        u, v, w, z = L[i]
-        i += 1  # on augmente i, l'indice qui parcourt l'ensemble des arêtes
-        x = find(parent, u)  # on cherche les racines du noeud u
-        y = find(parent, v)  # on chercher les racines du noeud v
-        if x != y:  # si les deux noeuds n'ont pas la même racine, alors ils ne sont pas dans la même composante connexe
-            e += 1  # on rajoute une arête au compteur
-            if u not in result:
-                result[u] = [(v, w, z)]
-            else:
-                if (v, w, z) not in result[u]:
-                    result[u].append((v, w, z))  # on rajoute dans le dictionnaire
-            if v not in result:
-                result[v] = [(u, w, z)]
-            else:
-                if (u, w, z) not in result[v]:
-                    result[v].append((u, w, z))
-            union(parent, rank, u, v)  # on met à jour le dictionnaire pour dire que les deux noeuds ont été reliés
-
-    sorted_keys = sorted(result.keys())
-    sorted_result = {}
-
-    for key in sorted_keys:
-        sorted_result[key] = result[key]
-
-    graphe_final = Graph(graph.nodes)  # on construit un objet de type graphe
-    for node1 in sorted_result.keys():
-        for element in sorted_result[node1]:
-            node2, puissance, distance = element
-            if (node2, puissance, distance) not in graphe_final.graph[node1]:
-                graphe_final.graph[node1].append((node2, puissance, distance))
-            if (node1, puissance, distance) not in graphe_final.graph[node2]:
-                graphe_final.graph[node2].append((node1, puissance, distance))
-
-    return graphe_final
