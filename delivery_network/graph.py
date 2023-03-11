@@ -123,24 +123,6 @@ class Graph:
         return self.get_path_with_power(src, dest, power), power
     
 
-    def creation_bijection(self):
-        """
-        Cette fonction crée une bijection entre des sommets et des numéros
-        """
-        liste = self.nodes
-        nouvelle_liste = Graph([i for i in range(1, len(liste) + 1)])
-        self = nouvelle_liste
-        for k in range(len(liste)):
-            dictionnaire = self.graph[liste[k]]
-            for element in dictionnaire:
-                voisin = element[0]
-                power = element[1]
-                dist = element[2]
-                nouvelle_liste.add_edge(k + 1, self.indice(voisin) + 1, power)
-        self = nouvelle_liste
-        return self
-
-
     def indice(self, node):
         liste = self.nodes
         for k in range(len(liste)):
