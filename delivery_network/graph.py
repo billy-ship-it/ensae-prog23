@@ -48,9 +48,6 @@ class Graph:
             return None
         return self.dijkstra(src, dest, power)                   # Complexité donc en O(V*(E+V!)) d'après celle des fonction précédentes
 
-
-
-
     def dijkstra(self, s, t, power):                              # Algorithme qui retourne le plus court chemin à partir d'un trajet
         Vu = set()
         d = {s: 0}
@@ -117,11 +114,27 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
     
     def min_power(self, src, dest):
-        power = 0
-        while not self.get_path_with_power(src, dest, power):               # Au plus P (max des puissances minimale des routes) occurrences
-            power += 1
-        return self.get_path_with_power(src, dest, power), power
-    
+        left = 0
+        right = 0
+        for node1 in self.nodes:
+            for element in self.graph[node1]:
+                node2, power, distance = element
+                if power > right:
+                    right = power
+
+        while left <= right:
+            mid = (left + right) // 2
+            path = self.get_path_with_power(src, dest, mid)
+            if path is not None:
+                right = mid - 1
+            else:
+                left = mid + 1
+        
+        return self.get_path_with_power(src, dest, left), left
+            
+                    
+        
+
     def indice(self, node):
         liste = self.nodes
         for k in range(len(liste)):
