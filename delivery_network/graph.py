@@ -114,15 +114,16 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
     
     def min_power(self, src, dest):
-        left = 0
-        right = 0
+        left = 0  # on initialise la borne inférieure
+        right = 0  # on initialise la borne supérieure
         for node1 in self.nodes:
             for element in self.graph[node1]:
                 node2, power, distance = element
                 if power > right:
-                    right = power
+                    right = power  # on attribue à la variable right la
+                    # plus grande puissance du graphe
 
-        while left <= right:
+        while left <= right:  # Nous procédons par dichotomie
             mid = (left + right) // 2
             path = self.get_path_with_power(src, dest, mid)
             if path is not None:
