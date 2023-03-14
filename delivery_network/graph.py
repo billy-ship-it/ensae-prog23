@@ -220,7 +220,7 @@ def kruskal(graph):
         for element in graph.graph[node]:
             noeud, puissance, distance = element
             L.append([node, noeud, puissance, distance])
-    L = sorted(L, key=lambda item: item[2])  # Correspond aux arêtes rangées par ordre croissant
+    L = sorted(L, key=lambda item: item[2])  # Trie les arêtes par ordre croissant de puissance
     while e < graph.nb_nodes - 1 and i < len(L):
         u, v, w, z = L[i]
         i += 1  # i est l'indice qui parcourt tous l'ensemble des arêtes
@@ -258,3 +258,12 @@ def kruskal(graph):
                 graphe_final.graph[node2].append((node1, puissance, distance))
 
     return graphe_final
+
+
+    #Question 11#
+    """ Il ne peut y avoir deux chemins reliant 2 sommets quelconques d'un arbre couvrant de poids minimal, puisque l'arbre n'est pas cyclique par définition.
+    Parcourons désormais l'arbre couvrant de poids minimal depuis une source quelconque.
+    Chaque arête d'un arbre couvrant de poids minimal sert à l'exploration d'un nouveau point : on n'accède pas à ce point depuis la source par une autre arête, 
+    puisqu'il n'existe qu'un seul chemin reliant la source à ce point. Ainsi à chaque nouvelle arête comptée on ajoute un nouveau point, l'opération 
+    s'arrêtant lorsque tous les points ont été explorés. Ainsi donc, pour V le nombre d'arêtes comptées dans l'arbre couvrant de poids minimal, on y recense donc V +1
+     (en ajoutant la source initiale) sommets le composant.   """
