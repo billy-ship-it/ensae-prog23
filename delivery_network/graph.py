@@ -290,23 +290,6 @@ def kruskal(graph):
 
 
      #Question 14#  
-    """
-     def exhiber_chemin_arbre_couvrant (self,src,dest):  #Cette fonction retourne le chemin entre source et destination, sous forme d'arêtes successives#
-        L=[]                                       # Liste des arêtes du chemin
-        aretes_vues =[]
-        sommets_visites = [src]
-        point_considere = src
-        while dest not in sommets_visites :
-            for elements in self.graph[point_considere]:
-                if elements not in aretes_vues:
-                    L.append(elements)
-                    aretes_vues.append(elements)
-                    sommets_visites.append(point_considere)
-
-            if self.graph[points_considere] = [] or set(self.graph[point_considere]) <= set(aretes_vues) == True :
-                L.pop()
-
-      """
     def min_power2 (self, src, dest):
         "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
         stack = [src]
@@ -316,7 +299,7 @@ def kruskal(graph):
         power_min = 0
         while stack:
             node = stack.pop()
-            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin !"
+            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin "
             if node == dest:
                 path = []
                 while node:
@@ -331,10 +314,34 @@ def kruskal(graph):
                     visited.add(child)
                     stack.append(child)
                     parent[child] = node
-                    power[child] = pow
-        "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
-        return None​
+                    power[child] = pow 
+#nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin
               
              
-            
+   def find_path(self, src, dest, path=[]):
+    path = path + [start]
+    if start == end:
+        return path
+    if start not in self.graph:
+        return None
+    for node in self.graph[start]:
+        if node not in path:
+            newpath = find_path(self.graph, node, end, path)
+            if newpath:
+                return newpath
+    return None         
+
+def recherche_powermin (self,path):
+    m = 0
+    for node in path:
+        for i in range len(self.graph[node]):
+        if self.graph[node][i][1] > m :
+            m = self.graph[node][i][1]
+        else: continue
+    return m
+        
+        
+
+
+        
 
