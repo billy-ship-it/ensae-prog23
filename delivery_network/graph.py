@@ -239,7 +239,7 @@ def kruskal(graph):
         for element in graph.graph[node]:
             noeud, puissance, distance = element
             L.append([node, noeud, puissance, distance])
-    L = sorted(L, key=lambda item: item[2])  # Correspond aux arêtes rangées par ordre croissant
+    L = sorted(L, key=lambda item: item[2])  # Trie les arêtes par ordre croissant de puissance
     while e < graph.nb_nodes - 1 and i < len(L):
         u, v, w, z = L[i]
         i += 1  # i est l'indice qui parcourt tous l'ensemble des arêtes
@@ -277,3 +277,64 @@ def kruskal(graph):
                 graphe_final.graph[node2].append((node1, puissance, distance))
 
     return graphe_final
+
+
+    #Question 11#
+    """ Il ne peut y avoir deux chemins reliant 2 sommets quelconques d'un arbre couvrant de poids minimal, puisque l'arbre n'est pas cyclique par définition.
+    Parcourons désormais l'arbre couvrant de poids minimal depuis une source quelconque.
+    Chaque arête d'un arbre couvrant de poids minimal sert à l'exploration d'un nouveau point : on n'accède pas à ce point depuis la source par une autre arête, 
+    puisqu'il n'existe qu'un seul chemin reliant la source à ce point. Ainsi à chaque nouvelle arête comptée on ajoute un nouveau point, l'opération 
+    s'arrêtant lorsque tous les points ont été explorés. Ainsi donc, pour V le nombre d'arêtes comptées dans l'arbre couvrant de poids minimal, on y recense donc V +1
+     (en ajoutant la source initiale) sommets le composant.   """
+
+
+
+     #Question 14#  
+    """
+     def exhiber_chemin_arbre_couvrant (self,src,dest):  #Cette fonction retourne le chemin entre source et destination, sous forme d'arêtes successives#
+        L=[]                                       # Liste des arêtes du chemin
+        aretes_vues =[]
+        sommets_visites = [src]
+        point_considere = src
+        while dest not in sommets_visites :
+            for elements in self.graph[point_considere]:
+                if elements not in aretes_vues:
+                    L.append(elements)
+                    aretes_vues.append(elements)
+                    sommets_visites.append(point_considere)
+
+            if self.graph[points_considere] = [] or set(self.graph[point_considere]) <= set(aretes_vues) == True :
+                L.pop()
+
+      """
+    def min_power2 (self, src, dest):
+        "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
+        stack = [src]
+        visited = set([src])
+        parent = {src: None}
+        power = {src : 0}
+        power_min = 0
+        while stack:
+            node = stack.pop()
+            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin !"
+            if node == dest:
+                path = []
+                while node:
+                    if power[node] > power_min:
+                        power_min = power[node]
+                    path.insert(0, node)
+                    node = parent[node]
+                return power_min, path
+            for child in self.graph[node]:
+                child , pow = child[0], child[1]
+                if child not in visited:
+                    visited.add(child)
+                    stack.append(child)
+                    parent[child] = node
+                    power[child] = pow
+        "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
+        return None​
+              
+             
+            
+
