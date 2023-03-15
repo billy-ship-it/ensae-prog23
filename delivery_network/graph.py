@@ -267,3 +267,55 @@ def kruskal(graph):
     puisqu'il n'existe qu'un seul chemin reliant la source à ce point. Ainsi à chaque nouvelle arête comptée on ajoute un nouveau point, l'opération 
     s'arrêtant lorsque tous les points ont été explorés. Ainsi donc, pour V le nombre d'arêtes comptées dans l'arbre couvrant de poids minimal, on y recense donc V +1
      (en ajoutant la source initiale) sommets le composant.   """
+
+
+
+     #Question 14#  
+    """
+     def exhiber_chemin_arbre_couvrant (self,src,dest):  #Cette fonction retourne le chemin entre source et destination, sous forme d'arêtes successives#
+        L=[]                                       # Liste des arêtes du chemin
+        aretes_vues =[]
+        sommets_visites = [src]
+        point_considere = src
+        while dest not in sommets_visites :
+            for elements in self.graph[point_considere]:
+                if elements not in aretes_vues:
+                    L.append(elements)
+                    aretes_vues.append(elements)
+                    sommets_visites.append(point_considere)
+
+            if self.graph[points_considere] = [] or set(self.graph[point_considere]) <= set(aretes_vues) == True :
+                L.pop()
+
+      """
+    def min_power2 (self, src, dest):
+        "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
+        stack = [src]
+        visited = set([src])
+        parent = {src: None}
+        power = {src : 0}
+        power_min = 0
+        while stack:
+            node = stack.pop()
+            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin !"
+            if node == dest:
+                path = []
+                while node:
+                    if power[node] > power_min:
+                        power_min = power[node]
+                    path.insert(0, node)
+                    node = parent[node]
+                return power_min, path
+            for child in self.graph[node]:
+                child , pow = child[0], child[1]
+                if child not in visited:
+                    visited.add(child)
+                    stack.append(child)
+                    parent[child] = node
+                    power[child] = pow
+        "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
+        return None​
+              
+             
+            
+

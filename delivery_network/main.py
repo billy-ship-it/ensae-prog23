@@ -1,7 +1,7 @@
 from graph import Graph, graph_from_file
 
 
-data_path = "input/"
+data_path = "/home/onyxia/work/ensae-prog23/input/"
 file_name = "network.01.in"
 
 
@@ -14,7 +14,7 @@ import math
 from heapq import *
 import numpy
 import random
-from graph import (Graph, graph_from_file) 
+
 
 
 def trajet_aleatoire (filename):                             # Attention ici, la notation semble indiquer qu'il s'agit d'un fichier quelconque, mais la fonction ne fonctionne qu'avec un fichier de type 'route'
@@ -24,7 +24,7 @@ def trajet_aleatoire (filename):                             # Attention ici, la
     return trajet_considere[0:2]
 
 
-G=graph_from_file ("input/network.1.in") 
+G = graph_from_file(data_path + file_name) 
 print(G)
 
 
