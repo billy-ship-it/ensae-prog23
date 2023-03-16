@@ -2,6 +2,9 @@ class Truck:
     def __init__(self, trucks):
         self.truck = dict([(n, []) for n in range(1, trucks + 1)])
         self.nb_trucks = trucks
+        self.puissance = dict([(n, []) for n in range(1, trucks + 1)])
+        self.cout = dict([(n, []) for n in range(1, trucks + 1)])
+
 
     def __str__(self):
         if not self.truck:
@@ -30,4 +33,6 @@ def truck_from_file(filename):
         t = Truck(nombre_camions)
         for k in range(1, nombre_camions + 1):
             t.truck[k] = tuple(lines[k])
-        return t
+            t.puissance[k] = (lines[k][0])
+            t.cout[k] = (lines[k][1])
+        return t.puissance
