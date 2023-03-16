@@ -1,4 +1,4 @@
-
+from graph import graph_from_file
 
 def route_from_file(filename):
     """ La fonction prend un fichier routes.nombre.in en entrée et crée 
