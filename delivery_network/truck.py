@@ -43,17 +43,12 @@ class Trucks:
         la puissance suffisante pour faire le trajet
         """
         puissance_trie = self.camion_trie_puissance()  # on trie les camions par ordre croissant de puissance
-        dict_puissance_valide = {}
         dict_cout = {}
         for camion in list(puissance_trie.keys()):
             if self.puissance[camion] >= puissance:  # si la puissance du camion est suffisante, on recrée un dictionnaire
-                dict_puissance_valide[camion] = self.puissance[camion]
                 dict_cout[camion] = self.cout[camion]
         return min(dict_cout, key=dict_cout.get)
 
-
-#calculer pour un trajet donné, le camion le moins cher qui a la puissance suffisante pour
-#pouvoir faire le trajet
 
 def truck_from_file(filename):
     """ créer un dictionnaire avec pour clés les catégories de camions et en
