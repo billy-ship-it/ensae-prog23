@@ -76,28 +76,28 @@ class Graph:
         return path
 
     def connected_components(self):
-        L = [0]*self.nb_nodes                                       # initialisation d'une liste pour savoir si les sommets ont déjà été visités
+        visite = {node : 0 for node in self.nodes}                                       # initialisation d'une liste pour savoir si les sommets ont déjà été visités
         compteur = 1                                                # on initialise le compteur
-        for node in range(1, self.nb_nodes + 1):                    # V occurrences
-            if L[node - 1] == 0:
-                self.explorer(node, L, compteur)                   # ce qui revient à modifier la liste L pour connaître les sommmets qui ont déja été parcourus 
+        for node in self.nodes:                    # V occurrences
+            if visite[node] == 0:
+                self.explorer(node, visite, compteur)                   # ce qui revient à modifier la liste L pour connaître les sommmets qui ont déja été parcourus 
                 compteur += 1
-        LIST = []
-        for compteur in range(1, max(L) + 1):
-            V = []
-            for node in range(1, self.nb_nodes + 1):
-                if L[node - 1] == compteur: 
-                    V.append(node)                                 # On met dans la même liste tous les sommets qui sont reliés entre eux
-            LIST.append(V)
-        return LIST                                                  # Complexité en O(V*V!), fonctionne donc pour un graphe de taille réduite.
+        
+        grouped = {}
+        for key, value in visite.items():
+            if value in grouped:
+                grouped[value].append(key)
+            else:
+                grouped[value] = [key]
+        return [nodes for nodes in grouped.values()]                                             # Complexité en O(V*V!), fonctionne donc pour un graphe de taille réduite.
     
-    def explorer(self, node, L, compteur):
-        L[node - 1] = compteur                                # Lorsque l'on se rend sur on nouveau sommet, on le marque
-        element = self.graph[node]
-        for noeud in element:                                      # Au plus V occurrences
-            voisin = noeud[0]
-            if L[voisin - 1] == 0:
-                self.explorer(voisin, L, compteur)                 # On marque tous les sommets qui sont voisins avec le sommet initial
+    def explorer(self, node, visite, compteur):
+        visite[node] = compteur                                # Lorsque l'on se rend sur on nouveau sommet, on le marque
+        voisins = self.graph[node]
+        for element in voisins:                                      # Au plus V occurrences
+            voisin = element[0]
+            if visite[voisin] == 0:
+                self.explorer(voisin, visite, compteur)                 # On marque tous les sommets qui sont voisins avec le sommet initial
 
     def connected_components_node(self, node):
         L = self.connected_components()
