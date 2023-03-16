@@ -76,7 +76,7 @@ class Graph:
         return path
 
     def connected_components(self):
-        visite = {node : 0 for node in self.nodes}                                       # initialisation d'une liste pour savoir si les sommets ont déjà été visités
+        visite = {node: 0 for node in self.nodes}                                       # initialisation d'une liste pour savoir si les sommets ont déjà été visités
         compteur = 1                                                # on initialise le compteur
         for node in self.nodes:                    # V occurrences
             if visite[node] == 0:
