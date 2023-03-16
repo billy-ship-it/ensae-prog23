@@ -5,7 +5,6 @@ class Truck:
         self.puissance = dict([(n, []) for n in range(1, trucks + 1)])
         self.cout = dict([(n, []) for n in range(1, trucks + 1)])
 
-
     def __str__(self):
         if not self.truck:
             output = "le catalogue est vide"
@@ -16,10 +15,9 @@ class Truck:
         return output
 
 
-
 def truck_from_file(filename):
-    """ créer un dictionnaire avec pour clés les catégories de camions et en arguments la puissance et le 
-    coût du camion
+    """ créer un dictionnaire avec pour clés les catégories de camions et en
+    arguments la puissance et le coût du camion
 
     La fonction prend en entrée des fichiers du type trucks.nombre.in
     """
