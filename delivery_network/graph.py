@@ -315,8 +315,7 @@ def kruskal(graph):
                     stack.append(child)
                     parent[child] = node
                     power[child] = pow 
-#nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin
-              
+    #nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin   
              
    def find_path(self, src, dest, path=[]):
     path = path + [start]
