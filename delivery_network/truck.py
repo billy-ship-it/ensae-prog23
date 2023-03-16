@@ -39,12 +39,17 @@ class Trucks:
         return dict(sorted(self.cout.items(), key=lambda item : item[1]))
         
     def camion_moins_cher(self, puissance):
-        puissance_trie = self.camion_trie_puissance()
+        """ Cette fonction renvoie le camion le moins cher avec
+        la puissance suffisante pour faire le trajet
+        """
+        puissance_trie = self.camion_trie_puissance()  # on trie les camions par ordre croissant de puissance
         dict_puissance_valide = {}
+        dict_cout = {}
         for camion in list(puissance_trie.keys()):
-            if self.cout[camion] >= puissance:  # si la puissance du camion est suffisante, on recrée un dictionnaire
-                dict_puissance_valide[camion] = self.cout[camion]
-        return dict_puissance_valide
+            if self.puissance[camion] >= puissance:  # si la puissance du camion est suffisante, on recrée un dictionnaire
+                dict_puissance_valide[camion] = self.puissance[camion]
+                dict_cout[camion] = self.cout[camion]
+        return min(dict_cout, key=dict_cout.get)
 
 
 #calculer pour un trajet donné, le camion le moins cher qui a la puissance suffisante pour
