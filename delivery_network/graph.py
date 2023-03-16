@@ -92,7 +92,7 @@ class Graph:
         return LIST                                                  # Complexité en O(V*V!), fonctionne donc pour un graphe de taille réduite.
     
     def explorer(self, node, L, compteur):
-        L[node - int(1)] = compteur                                # Lorsque l'on se rend sur on nouveau sommet, on le marque
+        L[node - 1] = compteur                                # Lorsque l'on se rend sur on nouveau sommet, on le marque
         element = self.graph[node]
         for noeud in element:                                      # Au plus V occurrences
             voisin = noeud[0]
@@ -191,23 +191,6 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
-
-def route_from_file(filename):
-    """ La fonction prend un fichier routes.nombre.in en entrée et crée 
-    un fichier routes.nombre.out dans le sous-dossier output dans lequel
-    le numéro sur chaque ligne correspond à la puissance minimale pour 
-    couvrir le trajet
-    """
-    with open(filename, "r") as file:
-        liste = list(file)
-        for k in range(len(liste)):
-            liste[k] = liste[k].split()
-    
-    with open(filename.replace("in", "out"), 'w') as file2:
-        for k in range((len(liste))):
-            if len(liste[k]) == 3:
-                src, dest, utilite = liste[k]
-                file2.write(str(graph_from_file(filename.replace("routes", "network")).min_power(int(src), int(dest))[1]) + "\n")
         
 
 def find(parent, i):  # permet de dire 
@@ -315,31 +298,10 @@ def kruskal(graph):
                     stack.append(child)
                     parent[child] = node
                     power[child] = pow 
-    #nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin   
-             
-   def find_path(self, src, dest, path=[]):
-    path = path + [start]
-    if start == end:
-        return path
-    if start not in self.graph:
-        return None
-    for node in self.graph[start]:
-        if node not in path:
-            newpath = find_path(self.graph, node, end, path)
-            if newpath:
-                return newpath
-    return None         
 
-def recherche_powermin (self,path):
-    m = 0
-    for node in path:
-        for i in range len(self.graph[node]):
-        if self.graph[node][i][1] > m :
-            m = self.graph[node][i][1]
-        else: continue
-    return m
-        
-        
+#nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin   
+             
+
 
 
         
