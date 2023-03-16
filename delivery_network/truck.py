@@ -70,7 +70,7 @@ def budget_trajets(filename_trucks):
     """
     budget = 0
     t = truck_from_file(filename_trucks)  # ici on a accès à un graphe
-    puissance_trie = t.camion_trie_puissance()        
+    puissance_trie = t.camion_trie_puissance()  # on a un dictionnaire trié selon la puissance croissante des camions      
     with open(filename_trucks.replace("trucks", "routes").replace("in", "out"), 'r') as file:
         puissance = file.readlines()
         for k in range(1, len(puissance)):
@@ -78,7 +78,7 @@ def budget_trajets(filename_trucks):
             puissance[k] = int(puissance[k][0])
     for k in range(1, len(puissance)):
         for camion in list(puissance_trie.keys()):
-            if puissance_trie[camion] >= puissance[k]:
+            if puissance_trie[camion] >= puissance[k]:  # 2 camions peuvent-ils avoir la même puissance?
                 budget += t.cout[camion]
                 break
     return budget
