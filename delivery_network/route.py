@@ -1,5 +1,6 @@
 from graph import graph_from_file
 
+
 def route_from_file(filename):
     """ La fonction prend un fichier routes.nombre.in en entrée et crée 
     un fichier routes.nombre.out dans le sous-dossier output dans lequel

@@ -67,6 +67,8 @@ def truck_from_file(filename):
 def budget_trajets(filename_trucks):
     """ Cette fonction calcule le budget qui serait nécéssaire pour couvrir
     l'ensemble des trajets
+    Ici la foncion marche si les différents camions du catalogue ont des 
+    puissances différentes
     """
     budget = 0
     t = truck_from_file(filename_trucks)  # ici on a accès à un graphe
