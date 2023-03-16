@@ -25,10 +25,13 @@ class Trucks:
         petite puissance du catalogue
         """
         return min(self.puissance, key=self.puissance.get)
+    
+    def camion_trie_puissance(self):
+        return sorted(self.puissance, key=self.puissance.get)
 
 
 
-
+# calculer le budget pour couvrir tous les trajets
 
 
 
