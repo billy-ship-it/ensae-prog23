@@ -11,7 +11,7 @@ class Trucks:
         else:
             output = f"le catalogue est composé de {self.nb_trucks} camion(s).\n"
             for numero, caracteristique in self.truck.items():
-                output += f"camion {numero} --> p = {caracteristique[0]}, c = {caracteristique[1]}\n"
+                output += f"camion {numero} a une puissance  de  {caracteristique[0]} et coûte {caracteristique[1]}\n"
         return output
 
     def camion_cout_min(self):
@@ -27,9 +27,16 @@ class Trucks:
         return min(self.puissance, key=self.puissance.get)
     
     def camion_trie_puissance(self):
-        return sorted(self.puissance, key=self.puissance.get)
+        """Cette fonction renvoie un dictionnaire trié suivant 
+        la puissance croissante des camions du catalogue
+        """
+        return dict(sorted(self.puissance.items(), key=lambda item :item[1]))
 
-
+    def camion_trie_cout(self):
+         """Cette fonction renvoie un dictionnaire trié suivant 
+        le coût croissant des camions du catalogue
+        """
+        return dict(sorted(self.cout.items(), key=lambda item : item[1]))
 
 # calculer le budget pour couvrir tous les trajets
 
