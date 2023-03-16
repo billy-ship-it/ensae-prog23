@@ -12,6 +12,8 @@ def route_from_file(filename):
             liste[k] = liste[k].split()
     
     with open(filename.replace("in", "out"), 'w') as file2:
+        premiere_ligne = f"le fichier {filename} est composé de {int(liste[0][0])} trajets\n"
+        file2.write(premiere_ligne)
         for k in range((len(liste))):
             if len(liste[k]) == 3:
                 src, dest, utilite = liste[k]
