@@ -10,8 +10,8 @@ class Trucks:
             output = "le catalogue est vide"
         else:
             output = f"le catalogue est composé de {self.nb_trucks} camion(s).\n"
-            for numero, caracteristique in self.truck.items():
-                output += f"camion {numero} a une puissance  de  {caracteristique[0]} et coûte {caracteristique[1]}\n"
+            for numero, (puissance, cout) in self.truck.items():
+                output += f"camion {numero} a une puissance  de  {puissance} et coûte {cout}\n"
         return output
 
     def camion_cout_min(self):
@@ -38,9 +38,16 @@ class Trucks:
         """
         return dict(sorted(self.cout.items(), key=lambda item : item[1]))
         
+    def camion_moins_cher(self, puissance):
+        puissance_trie = self.camion_trie_puissance()
+        dict_puissance_valide = {}
+        for camion in list(puissance_trie.keys()):
+            if self.cout[camion] >= puissance:  # si la puissance du camion est suffisante, on recrée un dictionnaire
+                dict_puissance_valide[camion] = self.cout[camion]
+        return dict_puissance_valide
 
-#calculer le budget pour effectuer tous les trajets
-#calculer pour un trajet donnée avec une certaine utilité, le camion le moins cher qui a la puissance suffisante pour
+
+#calculer pour un trajet donné, le camion le moins cher qui a la puissance suffisante pour
 #pouvoir faire le trajet
 
 def truck_from_file(filename):
