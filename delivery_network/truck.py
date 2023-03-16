@@ -1,4 +1,4 @@
-class Truck:
+class Trucks:
     def __init__(self, trucks):
         self.truck = dict([(n, []) for n in range(1, trucks + 1)])
         self.nb_trucks = trucks
@@ -14,6 +14,23 @@ class Truck:
                 output += f"camion {numero} --> p = {caracteristique[0]}, c = {caracteristique[1]}\n"
         return output
 
+    def camion_cout_min(self):
+        """ Cette fonction renvoie le camion qui a le plus petit
+        cout du catalogue
+        """
+        return min(self.cout, key=self.cout.get)
+    
+    def camion_puissance_min(self):
+        """ Cette fonction renvoie le camion qui a la plus
+        petite puissance du catalogue
+        """
+        return min(self.puissance, key=self.puissance.get)
+
+
+
+
+
+
 
 def truck_from_file(filename):
     """ créer un dictionnaire avec pour clés les catégories de camions et en
@@ -28,9 +45,9 @@ def truck_from_file(filename):
             for j in range(len(lines[k])):
                 lines[k][j] = int(lines[k][j])
         nombre_camions = lines[0][0]
-        t = Truck(nombre_camions)
+        t = Trucks(nombre_camions)
         for k in range(1, nombre_camions + 1):
             t.truck[k] = tuple(lines[k])
             t.puissance[k] = (lines[k][0])
             t.cout[k] = (lines[k][1])
-        return t.puissance
+        return t
