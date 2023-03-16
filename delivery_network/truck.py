@@ -63,6 +63,7 @@ def truck_from_file(filename):
             t.cout[k] = (lines[k][1])
         return t
 
+
 def budget_trajets(filename_trucks):
     """ Cette fonction calcule le budget qui serait nécéssaire pour couvrir
     l'ensemble des trajets
