@@ -133,18 +133,9 @@ class Graph:
         
         return self.get_path_with_power(src, dest, left), left
             
-                    
-        
-
-    def indice(self, node):
-        liste = self.nodes
-        for k in range(len(liste)):
-            if liste[k] == node:
-                return k
-    
     def representation(self, nom):
-        graphe = gr(format='png', engine="circo") # on a un objet graphviz
-        key = self.graph.keys() # on prend les clés du dictionnaire associé au graphe
+        graphe = gr(format='png', engine="circo")  # on a un objet graphviz
+        key = self.graph.keys()  # on prend les clés du dictionnaire associé au graphe
         sauv = []
         for i in key:  # on parcourt tous les sommets
             graphe.node(f"{i}", f"{i}")
@@ -155,6 +146,7 @@ class Graph:
             sauv.append(i)
         graphe.render(f"{nom}.dot")
         return ()
+
 
 def graph_from_file(filename):
     """
@@ -198,6 +190,7 @@ def find(parent, i):  # permet de dire
         return i
     return find(parent, parent[i])
 
+
 def union(parent, rank, x, y):  # parent est le dictionnaire à modifier
     """ Union est une fonction qui modifie le dictionnaire parent
     """
@@ -210,6 +203,7 @@ def union(parent, rank, x, y):  # parent est le dictionnaire à modifier
     else:
         parent[yroot] = xroot
         rank[xroot] += 1
+
 
 def kruskal(graph):
     result = {}
@@ -234,13 +228,15 @@ def kruskal(graph):
                 result[u] = [(v, w, z)]
             else:
                 if (v, w, z) not in result[u]:
-                    result[u].append((v, w, z))  # on rajoute dans le dictionnaire
+                    result[u].append((v, w, z))  # on rajoute dans le
+                    # dictionnaire
             if v not in result:
                 result[v] = [(u, w, z)]
             else:
                 if (u, w, z) not in result[v]:
                     result[v].append((u, w, z))
-            union(parent, rank, u, v)  # on met à jour le dictionnaire pour dire que 
+            union(parent, rank, u, v)  # on met à jour le dictionnaire pour 
+            # dire que 
 
     sorted_keys = sorted(result.keys())
 
@@ -272,8 +268,10 @@ def kruskal(graph):
 
 
 
-     #Question 14#  
-    def min_power2 (self, src, dest):
+    #Question 14#  
+
+
+    def min_power2(self, src, dest):
         "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
         stack = [src]
         visited = set([src])
