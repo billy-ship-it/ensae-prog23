@@ -157,6 +157,10 @@ class Graph:
                 self.explorer_kruskal(voisin, arbre, hauteur, puissance, compteur)
 
     def min_power3(self, src, dest, arbre, hauteur, puissance):
+        """Cette fonction renvoie pour un arbre couvrant,
+        le trajet entre la source et la destination ainsi que la puissance
+        minimale pour couvrir le trajet
+        """
         power = []
         left = [src]
         right = [dest]
