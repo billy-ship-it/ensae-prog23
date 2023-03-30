@@ -5,6 +5,7 @@ sys.path.append("delivery_network")
 from graph import graph_from_file
 import unittest   # The test framework
 
+
 class Test_MinimalPower(unittest.TestCase):
     def test_network0(self):
         g = graph_from_file("input/network.00.in")
