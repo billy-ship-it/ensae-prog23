@@ -162,10 +162,12 @@ class Graph:
         right = [dest]
         if hauteur[dest] == hauteur[src]:
             gauche, droite = src, dest
-            power.append(arbre[gauche][1], arbre[droite][1])
+            power.append(arbre[gauche][1])
+            power.append(arbre[droite][1])
             while arbre[gauche][0] != arbre[droite][0]:
+                power.append(arbre[gauche][1])
+                power.append(arbre[droite][1])
                 gauche, droite = arbre[gauche][0], arbre[droite][0]
-                power.append(arbre[gauche][1], arbre[droite][1])
                 right.append(droite)
                 left.append(gauche)
             right.reverse()
@@ -174,9 +176,10 @@ class Graph:
         elif hauteur[src] < hauteur[dest]:
             droite = dest
             power.append(arbre[droite][1])
+
             while hauteur[droite] != hauteur[src]:  # On les met au même niveau
-                droite = arbre[droite]
                 power.append(arbre[droite][1])
+                droite = arbre[droite][0]                
                 right.append(droite)
 
             gauche = src
@@ -186,10 +189,11 @@ class Graph:
                 return right, max(power)
 
             while arbre[gauche][0] != arbre[droite][0]:
+                power.append(arbre[gauche][1])
+                power.append(arbre[droite][1])
                 right.append(droite)
                 left.append(gauche)
                 gauche, droite = arbre[gauche][0], arbre[droite][0]
-                power.append(arbre[gauche][1], arbre[droite][1])
             right.reverse()
             return left + [arbre[droite][0]] + right, max(power)
             
@@ -205,10 +209,11 @@ class Graph:
                 return left, max(power)
 
             while arbre[gauche][0] != arbre[droite][0]:
+                power.append(arbre[gauche][1])
+                power.append(arbre[droite][1])
                 right.append(droite)
                 left.append(gauche)
                 gauche, droite = arbre[gauche][0], arbre[droite][0]
-                power.append(arbre[gauche][1], arbre[droite][1])
             right.reverse()
             return left + [arbre[gauche][0]] + right, max(power)
 
