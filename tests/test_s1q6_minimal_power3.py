@@ -6,6 +6,7 @@ from graph import graph_from_file
 import unittest   # The test framework
 from graph import *
 
+# Ce premier test vérifie si les trajets renvoyés sont les mêmes
 class Test_MinimalPower(unittest.TestCase):
     def test_network0(self):
         g = graph_from_file("input/network.00.in")
@@ -20,3 +21,6 @@ class Test_MinimalPower(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
