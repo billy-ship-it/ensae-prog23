@@ -187,8 +187,11 @@ class Graph:
                 gauche = arbre[gauche][0]
 
         right.reverse()
-
-        return left + [gauche] + right, max(power)
+        
+        if len(power) == 0:
+            return (0, 0)
+        else:
+            return left + [gauche] + right, max(power)
         
 
     def min_power2(self, src, dest):
