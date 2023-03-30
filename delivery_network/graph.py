@@ -140,7 +140,7 @@ class Graph:
         hauteur = {node: 0 for node in self.nodes}
         puissance = {node: 0 for node in self.nodes}
         compteur = 0
-        arbre[root] = root
+        arbre[root] = (root, root)
         hauteur[root] = 0
         puissance[root] = 0
         self.explorer_kruskal(root, arbre, hauteur, puissance, compteur)
@@ -151,58 +151,66 @@ class Graph:
         for element in self.graph[noeud]:
             voisin, power, distance = element
             if arbre[voisin] == 0:
-                arbre[voisin] = noeud
+                arbre[voisin] = (noeud, power)
                 hauteur[voisin] = compteur
                 puissance[voisin] = power
                 self.explorer_kruskal(voisin, arbre, hauteur, puissance, compteur)
 
     def min_power3(self, src, dest, arbre, hauteur, puissance):
+        power = []
         left = [src]
         right = [dest]
         if hauteur[dest] == hauteur[src]:
             gauche, droite = src, dest
-            while arbre[gauche] != arbre[droite]:
-                gauche, droite = arbre[gauche], arbre[droite]
+            power.append(arbre[gauche][1], arbre[droite][1])
+            while arbre[gauche][0] != arbre[droite][0]:
+                gauche, droite = arbre[gauche][0], arbre[droite][0]
+                power.append(arbre[gauche][1], arbre[droite][1])
                 right.append(droite)
                 left.append(gauche)
             right.reverse()
-            return left + [arbre[droite]] + right
+            return left + [arbre[droite][0]] + right, max(power)
 
         elif hauteur[src] < hauteur[dest]:
             droite = dest
+            power.append(arbre[droite][1])
             while hauteur[droite] != hauteur[src]:  # On les met au même niveau
                 droite = arbre[droite]
+                power.append(arbre[droite][1])
                 right.append(droite)
 
             gauche = src
 
             if gauche == droite:
                 right.reverse()
-                return right
+                return right, max(power)
 
-            while arbre[gauche] != arbre[droite]:
+            while arbre[gauche][0] != arbre[droite][0]:
                 right.append(droite)
                 left.append(gauche)
-                gauche, droite = arbre[gauche], arbre[droite]
+                gauche, droite = arbre[gauche][0], arbre[droite][0]
+                power.append(arbre[gauche][1], arbre[droite][1])
             right.reverse()
-            return left + [arbre[droite]] + right
+            return left + [arbre[droite][0]] + right, max(power)
             
         else:
             gauche = src
             while hauteur[gauche] != hauteur[dest]:  # On les met au même niveau
-                gauche = arbre[gauche]
+                power.append(arbre[gauche][1])
+                gauche = arbre[gauche][0]
                 left.append(gauche)
             droite = dest
 
             if gauche == droite:
-                return left
+                return left, max(power)
 
-            while arbre[gauche] != arbre[droite]:
+            while arbre[gauche][0] != arbre[droite][0]:
                 right.append(droite)
                 left.append(gauche)
-                gauche, droite = arbre[gauche], arbre[droite]
+                gauche, droite = arbre[gauche][0], arbre[droite][0]
+                power.append(arbre[gauche][1], arbre[droite][1])
             right.reverse()
-            return left + [arbre[gauche]] + right
+            return left + [arbre[gauche][0]] + right, max(power)
 
 
     def min_power2(self, src, dest):
@@ -366,7 +374,6 @@ def kruskal(graph):
     s'arrêtant lorsque tous les points ont été explorés. Ainsi donc, pour V le nombre d'arêtes comptées dans l'arbre couvrant de poids minimal, on y recense donc V +1
      (en ajoutant la source initiale) sommets le composant.   """
 
-             
 
 
 
