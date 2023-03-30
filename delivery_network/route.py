@@ -15,7 +15,10 @@ def route_from_file(filename):
     with open(filename.replace("in", "out"), 'w') as file2:
         premiere_ligne = f"le fichier {filename} est composé de {int(liste[0][0])} trajets\n"
         file2.write(premiere_ligne)
+        graphe = graph_from_file(filename.replace("routes", "network"))
+        arbre, hauteur, puissance = graphe.dictionnaire_kruskal()
         for k in range((len(liste))):
             if len(liste[k]) == 3:
                 src, dest, utilite = liste[k]
-                file2.write(str(graph_from_file(filename.replace("routes", "network")).min_power(int(src), int(dest))[1]) + "\n")
+                src, dest, utilite = int(src), int(dest), int(utilite)
+                file2.write(str(graphe.min_power3(src, dest, arbre, hauteur, puissance)) + "\n")
