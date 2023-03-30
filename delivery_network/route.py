@@ -21,4 +21,4 @@ def route_from_file(filename):
             if len(liste[k]) == 3:
                 src, dest, utilite = liste[k]
                 src, dest, utilite = int(src), int(dest), int(utilite)
-                file2.write(str(graphe.min_power3(src, dest, arbre, hauteur, puissance)[1]) + " " + str(utilite) "\n")
+                file2.write(str(graphe.min_power3(src, dest, arbre, hauteur, puissance)[1]) + " " + str(utilite) + "\n")
