@@ -132,7 +132,107 @@ class Graph:
                 left = mid + 1
         
         return self.get_path_with_power(src, dest, left), left
+
+    def dictionnaire_kruskal(self):
+        self = kruskal(self)
+        root = self.nodes[0]
+        arbre = {node: 0 for node in self.nodes}
+        hauteur = {node: 0 for node in self.nodes}
+        puissance = {node: 0 for node in self.nodes}
+        compteur = 0
+        arbre[root] = root
+        hauteur[root] = 0
+        puissance[root] = 0
+        self.explorer_kruskal(root, arbre, hauteur, puissance, compteur)
+        return arbre, hauteur, puissance
+
+    def explorer_kruskal(self, noeud, arbre, hauteur, puissance, compteur):
+        compteur += 1
+        for element in self.graph[noeud]:
+            voisin, power, distance = element
+            if arbre[voisin] == 0:
+                arbre[voisin] = noeud
+                hauteur[voisin] = compteur
+                puissance[voisin] = power
+                self.explorer_kruskal(voisin, arbre, hauteur, puissance, compteur)
+
+    def min_power3(self, src, dest, arbre, hauteur, puissance):
+        left = [src]
+        right = [dest]
+        if hauteur[dest] == hauteur[src]:
+            gauche, droite = src, dest
+            while arbre[gauche] != arbre[droite]:
+                gauche, droite = arbre[gauche], arbre[droite]
+                right.append(droite)
+                left.append(gauche)
+            right.reverse()
+            return left + [arbre[droite]] + right
+
+        elif hauteur[src] < hauteur[dest]:
+            droite = dest
+            while hauteur[droite] != hauteur[src]:  # On les met au même niveau
+                droite = arbre[droite]
+                right.append(droite)
+
+            gauche = src
+
+            if gauche == droite:
+                right.reverse()
+                return right
+
+            while arbre[gauche] != arbre[droite]:
+                right.append(droite)
+                left.append(gauche)
+                gauche, droite = arbre[gauche], arbre[droite]
+            right.reverse()
+            return left + [arbre[droite]] + right
             
+        else:
+            gauche = src
+            while hauteur[gauche] != hauteur[dest]:  # On les met au même niveau
+                gauche = arbre[gauche]
+                left.append(gauche)
+            droite = dest
+
+            if gauche == droite:
+                return left
+
+            while arbre[gauche] != arbre[droite]:
+                right.append(droite)
+                left.append(gauche)
+                gauche, droite = arbre[gauche], arbre[droite]
+            right.reverse()
+            return left + [arbre[gauche]] + right
+
+
+    def min_power2(self, src, dest):
+        self = kruskal(self)
+        "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
+        stack = [src]
+        visited = set([src])
+        parent = {src: None}
+        power = {src : 0}
+        power_min = 0
+        while stack:
+            node = stack.pop()
+            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin "
+            if node == dest:
+                path = []
+                while node:
+                    if power[node] > power_min:
+                        power_min = power[node]
+                    path.insert(0, node)
+                    node = parent[node]
+                return power_min, path
+            for child in self.graph[node]:
+                child , pow = child[0], child[1]
+                if child not in visited:
+                    visited.add(child)
+                    stack.append(child)
+                    parent[child] = node
+                    power[child] = pow
+            
+    
     def representation(self, nom):
         graphe = gr(format='png', engine="circo")  # on a un objet graphviz
         key = self.graph.keys()  # on prend les clés du dictionnaire associé au graphe
@@ -266,38 +366,6 @@ def kruskal(graph):
     s'arrêtant lorsque tous les points ont été explorés. Ainsi donc, pour V le nombre d'arêtes comptées dans l'arbre couvrant de poids minimal, on y recense donc V +1
      (en ajoutant la source initiale) sommets le composant.   """
 
-
-
-    #Question 14#  
-
-
-    def min_power2(self, src, dest):
-        "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
-        stack = [src]
-        visited = set([src])
-        parent = {src: None}
-        power = {src : 0}
-        power_min = 0
-        while stack:
-            node = stack.pop()
-            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin "
-            if node == dest:
-                path = []
-                while node:
-                    if power[node] > power_min:
-                        power_min = power[node]
-                    path.insert(0, node)
-                    node = parent[node]
-                return power_min, path
-            for child in self.graph[node]:
-                child , pow = child[0], child[1]
-                if child not in visited:
-                    visited.add(child)
-                    stack.append(child)
-                    parent[child] = node
-                    power[child] = pow 
-
-#nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin   
              
 
 
