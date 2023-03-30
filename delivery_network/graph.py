@@ -159,68 +159,37 @@ class Graph:
     def min_power3(self, src, dest, arbre, hauteur, puissance):
         """Cette fonction renvoie pour un arbre couvrant,
         le trajet entre la source et la destination ainsi que la puissance
-        minimale pour couvrir le trajet
         """
         power = []
-        left = [src]
-        right = [dest]
-        if hauteur[dest] == hauteur[src]:
-            gauche, droite = src, dest
-            power.append(arbre[gauche][1])
-            power.append(arbre[droite][1])
-            while arbre[gauche][0] != arbre[droite][0]:
-                power.append(arbre[gauche][1])
-                power.append(arbre[droite][1])
-                gauche, droite = arbre[gauche][0], arbre[droite][0]
-                right.append(droite)
-                left.append(gauche)
-            right.reverse()
-            return left + [arbre[droite][0]] + right, max(power)
+        left = []
+        right = []
 
-        elif hauteur[src] < hauteur[dest]:
-            droite = dest
-            power.append(arbre[droite][1])
+        gauche = src
+        droite = dest
 
-            while hauteur[droite] != hauteur[src]:  # On les met au même niveau
-                power.append(arbre[droite][1])
-                droite = arbre[droite][0]                
-                right.append(droite)
-
-            gauche = src
-
-            if gauche == droite:
-                right.reverse()
-                return right, max(power)
-
-            while arbre[gauche][0] != arbre[droite][0]:
-                power.append(arbre[gauche][1])
-                power.append(arbre[droite][1])
-                right.append(droite)
-                left.append(gauche)
-                gauche, droite = arbre[gauche][0], arbre[droite][0]
-            right.reverse()
-            return left + [arbre[droite][0]] + right, max(power)
+        while gauche != droite:
             
-        else:
-            gauche = src
-            while hauteur[gauche] != hauteur[dest]:  # On les met au même niveau
+            if hauteur[gauche] == hauteur[droite]:
+                right.append(droite)
+                left.append(gauche)
+                power.append(arbre[droite][1])
+                power.append(arbre[gauche][1])
+                droite, gauche = arbre[droite][0], arbre[gauche][0]
+            
+            elif hauteur[gauche] < hauteur[droite]:
+                right.append(droite)
+                power.append(arbre[droite][1])
+                droite = arbre[droite][0]
+            
+            else:
+                left.append(gauche)
                 power.append(arbre[gauche][1])
                 gauche = arbre[gauche][0]
-                left.append(gauche)
-            droite = dest
 
-            if gauche == droite:
-                return left, max(power)
+        right.reverse()
 
-            while arbre[gauche][0] != arbre[droite][0]:
-                power.append(arbre[gauche][1])
-                power.append(arbre[droite][1])
-                right.append(droite)
-                left.append(gauche)
-                gauche, droite = arbre[gauche][0], arbre[droite][0]
-            right.reverse()
-            return left + [arbre[gauche][0]] + right, max(power)
-
+        return left + [gauche] + right, max(power)
+        
 
     def min_power2(self, src, dest):
         self = kruskal(self)
