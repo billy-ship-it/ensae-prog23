@@ -1,3 +1,6 @@
+import re
+import math
+
 class Trucks:
     def __init__(self, trucks):
         self.truck = dict([(n, []) for n in range(1, trucks + 1)])
@@ -25,6 +28,12 @@ class Trucks:
         petite puissance du catalogue
         """
         return min(self.puissance, key=self.puissance.get)
+
+    def camion_puissance_max(self):
+        """ Cette fonction renvoie le camion qui a la plus
+        grande puissance du catalogue
+        """
+        return max(self.puissance, key=self.puissance.get)
     
     def camion_trie_puissance(self):
         """Cette fonction renvoie un dictionnaire trié suivant 
@@ -47,6 +56,8 @@ class Trucks:
         for camion in list(puissance_trie.keys()):
             if self.puissance[camion] >= puissance:  # si la puissance du camion est suffisante, on recrée un dictionnaire
                 dict_cout[camion] = self.cout[camion]
+        if len(dict_cout) == 0:
+            return 
         return min(dict_cout, key=dict_cout.get)
 
 
@@ -92,3 +103,24 @@ def budget_trajets(filename_trucks):
                 break
     return budget
 
+
+def construction_knapstack(filename_routesout, filename_truck):
+    t = truck_from_file(filename_truck)
+    cout = t.cout
+    puissance = t.puissance
+    power_max = t.puissance[t.camion_puissance_max()]
+
+    numero_routes = re.sub("[^0-9]", "", filename_routesout).replace("23", "")
+    numero_trucks = re.sub("[^0-9]", "", filename_truck).replace("23", "")
+
+    with open(filename_routesout, 'r') as f:
+        lines = f.readlines()
+        with open("/home/onyxia/work/ensae-prog23/output/" + "routes" + numero_routes + "trucks" + numero_trucks + ".out", 'w') as file:
+            for k in range(1, len(lines)):
+                lines[k] = lines[k].split()
+                lines[k] = list(map(int, lines[k]))   
+                power, utilite = lines[k]
+                if power > power_max:
+                    file.write("  " + " " + str(utilite) + "\n")
+                else:
+                    file.write(str(t.cout[t.camion_moins_cher(power)]) + " " + str(utilite) + "\n")
