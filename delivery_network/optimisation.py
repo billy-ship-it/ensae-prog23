@@ -40,3 +40,6 @@ def optimisation_profit(filename_routes, filename_trucks, budget):
     selected_items.reverse()
 
     return (max_value, selected_item)
+
+
+def knapsack(B, filename_trucks, filename)
