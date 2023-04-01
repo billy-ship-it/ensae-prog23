@@ -104,7 +104,7 @@ def budget_trajets(filename_trucks):
     return budget
 
 
-def construction_knapstack(filename_routesout, filename_truck):
+def rapport(filename_routesout, filename_truck):
     t = truck_from_file(filename_truck)
     cout = t.cout
     puissance = t.puissance
@@ -123,4 +123,4 @@ def construction_knapstack(filename_routesout, filename_truck):
                 if power > power_max:
                     file.write("  " + " " + str(utilite) + "\n")
                 else:
-                    file.write(str(t.cout[t.camion_moins_cher(power)]) + " " + str(utilite) + "\n")
+                    file.write(str(t.cout[t.camion_moins_cher(power)]) + " " + str(utilite) + " " + str(utilite/t.cout[t.camion_moins_cher(power)]) +"\n")
