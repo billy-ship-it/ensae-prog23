@@ -69,6 +69,8 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
 
     cout_camion_min = t.cout[t.camion_cout_min()]
 
+    marge = B - depense
+
     with open(filename_sortedroutesXtrucks, 'r') as f:
         lines = f.readlines()
         for k in range(len(lines)):
@@ -86,9 +88,12 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
 
     if marge < cout_camion_min:
         return profit, depense
+    
     else:
+        marge = B - depense
         while marge >= cout_camion_min:
             cout, utilite = lines[k][0:1]
+            if cout
             profit += utilite
             depense
 
