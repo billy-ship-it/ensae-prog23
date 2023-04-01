@@ -10,15 +10,23 @@ def sort(filename_routeXtrucks):
     suivant le rapport de l'utilité décroissant
     """
     with open(filename_routeXtrucks, 'r') as f:
+        g = []
         lines = f.readlines()
         for k in range(len(lines)):
             lines[k] = lines[k].split()
-            for j in range(0, 2):
-                lines[k][j] = int(lines[k][j])
-            lines[k][2] = float(lines[k][2])
+
+            if len(lines[k]) == 3:
+                lines[k][0] = int(lines[k][0])
+                lines[k][1] = int(lines[k][1])
+                lines[k][2] = float(lines[k][2])
+
+            else:
+                g.append(k)
+        
+    
     lines.sort(key=lambda item: item[2], reverse=True)
 
-    with open( "/home/onyxia/work/ensae-prog23/output/sorted" + str(filename_routeXtrucks[filename_routeXtrucks.find("routes"):]), 'w') as file:
+    with open("/home/onyxia/work/ensae-prog23/output/sorted" + str(filename_routeXtrucks[filename_routeXtrucks.find("routes"):]), 'w') as file:
         for k in range(len(lines)):
             file.write(str(lines[k][0]) + " " + str(lines[k][1]) + " " + str(lines[k][2]) + "\n")
     
@@ -93,9 +101,7 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
         marge = B - depense
         while marge >= cout_camion_min:
             cout, utilite = lines[k][0:1]
-            if cout
-            profit += utilite
-            depense
+
 
 
 

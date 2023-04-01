@@ -120,7 +120,5 @@ def rapport(filename_routesout, filename_truck):
                 lines[k] = lines[k].split()
                 lines[k] = list(map(int, lines[k]))   
                 power, utilite = lines[k]
-                if power > power_max:
-                    file.write("  " + " " + str(utilite) + "\n")
-                else:
+                if power <= power_max:
                     file.write(str(t.cout[t.camion_moins_cher(power)]) + " " + str(utilite) + " " + str(utilite/t.cout[t.camion_moins_cher(power)]) +"\n")
