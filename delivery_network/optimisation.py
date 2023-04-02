@@ -70,14 +70,11 @@ def optimisation_profit(filename_routes, filename_trucks, budget):
     return (max_value, selected_item)
 
 def calcul_profit(B, filename_sortedroutesXtrucks):
-    t = truck_from_file("/home/onyxia/work/ensae-prog23/input" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find(trucks):].replace("out", "in"))
+    t = truck_from_file("/home/onyxia/work/ensae-prog23/input/" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find("trucks"):].replace("trucks", "trucks.").replace("out", "in"))
     depense = 0
     profit = 0
-    k = 0
-
-    cout_camion_min = t.cout[t.camion_cout_min()]
-
-    marge = B - depense
+    
+    print("/home/onyxia/work/ensae-prog23/input/" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find("trucks"):].replace("trucks", "trucks.").replace("out", "in"))
 
     with open(filename_sortedroutesXtrucks, 'r') as f:
         lines = f.readlines()
@@ -86,22 +83,26 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
             for j in range(0, 2):
                 lines[k][j] = int(lines[k][j])
     
-    while depense < B:
-        cout, utilite = lines[k][0:1]
+    k = 0 
+    
+    while depense + lines[k][0]  < B and k < len(lines):
+        cout, utilite = lines[k][0], lines[k][1]
         profit += utilite
         depense += cout
         k += 1
-
-    marge = B - depense
-
-    if marge < cout_camion_min:
-        return profit, depense
     
-    else:
-        marge = B - depense
-        while marge >= cout_camion_min:
-            cout, utilite = lines[k][0:1]
+    cout_camion_min = min(lines[k:], key=lambda item: item[0])[0]
 
+    print(B - depense < cout_camion_min)
+    for i in range(k, len(lines)):
+        if depense + lines[i][0] < B:
+            cout, utilite = lines[i][0], lines[i][1]
+            profit += utilite
+            depense += cout
+        if B - depense < cout_camion_min:
+            return depense, profit, B - depense < cout_camion_min
+
+    return depense, profit, B - depense < cout_camion_min
 
 
 
