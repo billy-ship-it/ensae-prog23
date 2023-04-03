@@ -5,7 +5,7 @@ def route_from_file(filename):
     """ La fonction prend un fichier routes.nombre.in en entrée et crée 
     un fichier routes.nombre.out dans le sous-dossier output dans lequel
     le numéro sur chaque ligne correspond à la puissance minimale pour 
-    couvrir le trajet
+    couvrir le trajet et l'utilite du trajet
     """
     with open(filename, "r") as file:
         liste = list(file)
