@@ -102,7 +102,7 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
     return depense, profit
 
 
-def aleatoire(B, filename_sortedroutesXtrucks, nb_iterations, taille):
+def aleatoire(B, filename_sortedroutesXtrucks, nb_iteration):
 
     with open(filename_sortedroutesXtrucks, 'r') as f:
         lines = f.readlines()
@@ -114,7 +114,7 @@ def aleatoire(B, filename_sortedroutesXtrucks, nb_iterations, taille):
     dic_parent = {}
     max = 0
 
-    for i in range(1, 10):
+    for i in range(1, nb_iteration + 1):
 
         depense = 0
         utilite = 0
