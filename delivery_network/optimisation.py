@@ -2,6 +2,7 @@
 from graph import *
 from truck import *
 from route import *
+import random
 
 
 
@@ -98,7 +99,48 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
     
     cout_camion_min = min(lines[k:], key=lambda item: item[0])[0]
 
-    return depense, profit, B - depense >= cout_camion_min
+    return depense, profit
+
+
+def aleatoire(B, filename_sortedroutesXtrucks, nb_iterations, taille):
+
+    with open(filename_sortedroutesXtrucks, 'r') as f:
+        lines = f.readlines()
+        for k in range(len(lines)):
+            lines[k] = lines[k].split()
+            for j in range(0, 2):
+                lines[k][j] = int(lines[k][j])
+
+    dic_parent = {}
+    max = 0
+
+    for i in range(1, 10):
+
+        depense = 0
+        utilite = 0
+        L = []
+        dic_indice = {n: 0 for n in range(0, len(lines))}
+
+        while depense < B:
+
+            indice = random.randint(0, len(lines) - 1)
+            if dic_indice[indice] == 0:
+                depense += lines[indice][0]
+                utilite += lines[indice][1]
+                L.append(lines[indice])
+            
+            dic_indice[indice] = 1
+
+        if max < utilite:
+            max = utilite
+
+        dic_parent[i] = (L, depense, utilite)
+        print(utilite)
+
+    return max
+
+            
+
 
 
 
