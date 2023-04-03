@@ -69,23 +69,28 @@ def optimisation_profit(filename_routes, filename_trucks, budget):
 
     return (max_value, selected_item)
 
+
 def calcul_profit(B, filename_sortedroutesXtrucks):
-    t = truck_from_file("/home/onyxia/work/ensae-prog23/input/" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find("trucks"):].replace("trucks", "trucks.").replace("out", "in"))
+
+    chemin_camion = "/home/onyxia/work/ensae-prog23/input/" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find("trucks"):].replace("trucks", "trucks.").replace("out", "in")
+
+    t = truck_from_file(chemin_camion)
     depense = 0
     profit = 0
     
-    print("/home/onyxia/work/ensae-prog23/input/" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find("trucks"):].replace("trucks", "trucks.").replace("out", "in"))
-
     with open(filename_sortedroutesXtrucks, 'r') as f:
         lines = f.readlines()
         for k in range(len(lines)):
             lines[k] = lines[k].split()
             for j in range(0, 2):
                 lines[k][j] = int(lines[k][j])
+
+    if budget_trajets(chemin_camion) <= B:
+        return budget_trajets(chemin_camion), sum(list(map(lambda item: item[1], lines)))
     
     k = 0 
     
-    while depense + lines[k][0]  < B and k < len(lines):
+    while depense + lines[k][0] < B and k < len(lines):
         cout, utilite = lines[k][0], lines[k][1]
         profit += utilite
         depense += cout
@@ -93,16 +98,7 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
     
     cout_camion_min = min(lines[k:], key=lambda item: item[0])[0]
 
-    print(B - depense < cout_camion_min)
-    for i in range(k, len(lines)):
-        if depense + lines[i][0] < B:
-            cout, utilite = lines[i][0], lines[i][1]
-            profit += utilite
-            depense += cout
-        if B - depense < cout_camion_min:
-            return depense, profit, B - depense < cout_camion_min
-
-    return depense, profit, B - depense < cout_camion_min
+    return depense, profit, B - depense >= cout_camion_min
 
 
 
