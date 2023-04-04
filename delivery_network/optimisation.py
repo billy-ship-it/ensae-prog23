@@ -103,12 +103,18 @@ def calcul_profit(B, filename_sortedroutesXtrucks):
 
 def aleatoire(B, filename_sortedroutesXtrucks, nb_iteration):
 
+    chemin_camion = "/home/onyxia/work/ensae-prog23/input/" + filename_sortedroutesXtrucks[filename_sortedroutesXtrucks.find("trucks"):].replace("trucks", "trucks.").replace("out", "in")
+
+
     with open(filename_sortedroutesXtrucks, 'r') as f:
         lines = f.readlines()
         for k in range(len(lines)):
             lines[k] = lines[k].split()
             for j in range(0, 2):
                 lines[k][j] = int(lines[k][j])
+
+    if budget_trajets(chemin_camion) <= B:
+        return budget_trajets(chemin_camion), sum(list(map(lambda item: item[1], lines)))
 
     dic_parent = {}
     max = 0
