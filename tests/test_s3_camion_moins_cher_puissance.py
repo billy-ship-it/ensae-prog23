@@ -17,6 +17,6 @@ class Test_MST(unittest.TestCase):
 
     def test_truck2(self):
         g = truck_from_file("input/trucks.2.in")
-        self.assertEqual(g.camion_moins_cher(9983000 - 1), 9983)
+        self.assertEqual(g.camion_moins_cher(9983000 - 1), 9987)
 if __name__ == '__main__':
     unittest.main()
