@@ -82,29 +82,27 @@ def truck_from_file(filename):
         return t
 
 
-def budget_trajets(filename_trucks):
+def budget_trajet(filename_routesXtrucks):
     """ Cette fonction calcule le budget qui serait nécéssaire pour couvrir
     l'ensemble des trajets
-    Ici la foncion marche si les différents camions du catalogue ont des 
-    puissances différentes
+    
     """
-    budget = 0
-    t = truck_from_file(filename_trucks)  # ici on a accès à un graphe
-    puissance_trie = t.camion_trie_puissance()  # on a un dictionnaire trié selon la puissance croissante des camions      
-    with open(filename_trucks.replace("trucks", "routes").replace("in", "out"), 'r') as file:
-        puissance = file.readlines()
-        for k in range(1, len(puissance)):
-            puissance[k] = puissance[k].split()
-            puissance[k] = int(puissance[k][0])
-    for k in range(1, len(puissance)):
-        for camion in list(puissance_trie.keys()):
-            if puissance_trie[camion] >= puissance[k]:  # 2 camions peuvent-ils avoir la même puissance?
-                budget += t.cout[camion]
-                break
-    return budget
+
+    with open(filename_routesXtrucks, 'r') as file:
+        lines = file.readlines()
+        for k in range(len(lines)):
+            lines[k] = lines[k].split()
+            lines[k][0] = int(lines[k][0])
+    return sum(list(map(lambda item: item[0], lines)))
+    
+
 
 
 def rapport(filename_routesout, filename_truck):
+    """ cette fonction crée un fichier output
+    avec pour chaque ligne, le cout minimal pour couvrir le trajet, 
+    l'utilité associé au trajet et le rapport de l'utilité et du coût
+    """
     t = truck_from_file(filename_truck)
     cout = t.cout
     puissance = t.puissance
